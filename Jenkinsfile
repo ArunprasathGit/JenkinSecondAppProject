@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven'
-    }
-
     stages {
 
         stage('Checkout') {
@@ -28,6 +24,12 @@ pipeline {
         stage('Package') {
             steps {
                 bat 'mvn package'
+            }
+        }
+
+        stage('Install') {
+            steps {
+                bat 'mvn clean install'
             }
         }
     }
