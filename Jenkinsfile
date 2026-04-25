@@ -4,10 +4,10 @@ pipeline {
     stages {
 
         stage('Checkout') {
-            steps {
-                git 'https://github.com/ArunprasathGit/JenkinSecondAppProject.git'
-            }
-        }
+    steps {
+        git branch: 'main', url: 'https://github.com/ArunprasathGit/JenkinSecondAppProject.git'
+    }
+}
 
         stage('Build') {
             steps {
