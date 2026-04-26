@@ -1,12 +1,12 @@
 package com.ms.secondapp.service;
 
 import com.ms.secondapp.dto.EmployeeDTO;
+import com.ms.secondapp.exception.DuplicateResourceExcpetion;
+import com.ms.secondapp.exception.ResourceNotFoundException;
 import com.ms.secondapp.model.Employee;
 import com.ms.secondapp.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +22,7 @@ public class EmployeeService {
         Optional<Employee> existing = repository.findByName(emp.getName());
 
         if (existing.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Employee already exists");
+            throw new DuplicateResourceExcpetion("Employee already exists");
         }
 
         Employee e = new Employee();
@@ -40,7 +40,7 @@ public class EmployeeService {
 
     public EmployeeDTO getByid(Long id) {
         Employee emp = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee Not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
         EmployeeDTO edto = new EmployeeDTO();
         edto.setName(emp.getName());
@@ -50,7 +50,7 @@ public class EmployeeService {
 
     public EmployeeDTO updateEmp(Long id, EmployeeDTO edto) {
         Employee e = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() -> new DuplicateResourceExcpetion("Employee not found"));
 
         e.setName(edto.getName());
         e.setRole(edto.getRole());
@@ -75,7 +75,7 @@ public class EmployeeService {
 
     public String delete(Long id) {
         Employee emp = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
         repository.delete(emp);
         return "Employee deleted successfully";
