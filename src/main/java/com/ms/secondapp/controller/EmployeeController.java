@@ -1,5 +1,6 @@
 package com.ms.secondapp.controller;
 
+import com.ms.secondapp.dto.ApiResponse;
 import com.ms.secondapp.dto.EmployeeDTO;
 
 import com.ms.secondapp.service.EmployeeService;
@@ -7,6 +8,8 @@ import com.ms.secondapp.service.EmployeeService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,8 +20,15 @@ public class EmployeeController {
     private EmployeeService service;
 
     @PostMapping
-    public EmployeeDTO create(@RequestBody EmployeeDTO emp) {
-        return service.save(emp);
+    public ResponseEntity<ApiResponse> create(@RequestBody EmployeeDTO emp) {
+        EmployeeDTO saved = service.save(emp);
+
+        ApiResponse apiresponse = new ApiResponse(
+                "Employee Created Successfully",
+                201, saved);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(apiresponse);
+
     }
 
     @GetMapping
